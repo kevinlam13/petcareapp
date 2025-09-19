@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 void main() {
   runApp(MaterialApp(
@@ -17,7 +18,32 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   int hungerLevel = 50;
   Color petColor = Colors.yellow;
   String mood = "Neutral";
-  final TextEditingController _nameController = TextEditingController(); 
+  final TextEditingController _nameController = TextEditingController();
+  Timer? _hungerTimer; 
+
+  @override
+  void initState() {
+    super.initState();
+    
+    _hungerTimer = Timer.periodic(Duration(seconds: 30), (timer) {
+      setState(() {
+        hungerLevel += 5;
+        if (hungerLevel > 100) {
+          hungerLevel = 100;
+          happinessLevel -= 10;
+          if (happinessLevel < 0) happinessLevel = 0;
+        }
+        _updatePetColorAndMood();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+  
+    _hungerTimer?.cancel();
+    super.dispose();
+  }
 
   void _playWithPet() {
     setState(() {
@@ -35,7 +61,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     });
   }
 
-  
   void _setPetName() {
     setState(() {
       if (_nameController.text.isNotEmpty) {
@@ -85,7 +110,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0),
               child: TextField(
@@ -103,7 +127,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
             ),
             SizedBox(height: 16.0),
             Icon(
-              Icons.catching_pokemon,
+              Icons.pets,
               size: 100,
               color: petColor,
             ),
