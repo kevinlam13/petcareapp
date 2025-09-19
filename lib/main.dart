@@ -16,15 +16,15 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   String petName = "Your Pet";
   int happinessLevel = 50;
   int hungerLevel = 50;
+  int energyLevel = 50; 
   Color petColor = Colors.yellow;
   String mood = "Neutral";
   final TextEditingController _nameController = TextEditingController();
-  Timer? _hungerTimer; 
+  Timer? _hungerTimer;
 
   @override
   void initState() {
     super.initState();
-    
     _hungerTimer = Timer.periodic(Duration(seconds: 30), (timer) {
       setState(() {
         hungerLevel += 5;
@@ -40,7 +40,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
 
   @override
   void dispose() {
-  
     _hungerTimer?.cancel();
     super.dispose();
   }
@@ -48,6 +47,9 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   void _playWithPet() {
     setState(() {
       happinessLevel += 10;
+      energyLevel -= 5; 
+      if (happinessLevel > 100) happinessLevel = 100;
+      if (energyLevel < 0) energyLevel = 0;
       _updateHunger();
       _updatePetColorAndMood();
     });
@@ -56,6 +58,9 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   void _feedPet() {
     setState(() {
       hungerLevel -= 10;
+      energyLevel += 3;
+      if (hungerLevel < 0) hungerLevel = 0;
+      if (energyLevel > 100) energyLevel = 100;
       _updateHappiness();
       _updatePetColorAndMood();
     });
@@ -149,6 +154,12 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
             SizedBox(height: 16.0),
             Text(
               'Hunger Level: $hungerLevel',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            
+            SizedBox(height: 16.0),
+            Text(
+              'Energy Level: $energyLevel',
               style: TextStyle(fontSize: 20.0),
             ),
             SizedBox(height: 32.0),
