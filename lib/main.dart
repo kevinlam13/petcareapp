@@ -16,7 +16,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   String petName = "Your Pet";
   int happinessLevel = 50;
   int hungerLevel = 50;
-  int energyLevel = 50; 
+  int energyLevel = 50;
   Color petColor = Colors.yellow;
   String mood = "Neutral";
   final TextEditingController _nameController = TextEditingController();
@@ -47,7 +47,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   void _playWithPet() {
     setState(() {
       happinessLevel += 10;
-      energyLevel -= 5; 
+      energyLevel -= 5;
       if (happinessLevel > 100) happinessLevel = 100;
       if (energyLevel < 0) energyLevel = 0;
       _updateHunger();
@@ -156,11 +156,29 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               'Hunger Level: $hungerLevel',
               style: TextStyle(fontSize: 20.0),
             ),
-            
             SizedBox(height: 16.0),
             Text(
               'Energy Level: $energyLevel',
               style: TextStyle(fontSize: 20.0),
+            ),
+            // NEW: Energy Bar Widget
+            SizedBox(height: 8.0),
+            LinearProgressIndicator(
+              value: energyLevel / 100,
+              backgroundColor: Colors.grey[300],
+              valueColor: AlwaysStoppedAnimation<Color>(
+                energyLevel > 70 
+                  ? Colors.green 
+                  : energyLevel > 30 
+                    ? Colors.yellow 
+                    : Colors.red,
+              ),
+              minHeight: 20,
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              'Energy Bar',
+              style: TextStyle(fontSize: 16.0),
             ),
             SizedBox(height: 32.0),
             ElevatedButton(
