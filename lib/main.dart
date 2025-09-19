@@ -21,6 +21,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   String mood = "Neutral";
   final TextEditingController _nameController = TextEditingController();
   Timer? _hungerTimer;
+  Timer? _energyTimer; 
 
   @override
   void initState() {
@@ -36,11 +37,20 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
         _updatePetColorAndMood();
       });
     });
+    
+    
+    _energyTimer = Timer.periodic(Duration(minutes: 1), (timer) {
+      setState(() {
+        energyLevel -= 5;
+        if (energyLevel < 0) energyLevel = 0;
+      });
+    });
   }
 
   @override
   void dispose() {
     _hungerTimer?.cancel();
+    _energyTimer?.cancel(); 
     super.dispose();
   }
 
@@ -161,7 +171,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               'Energy Level: $energyLevel',
               style: TextStyle(fontSize: 20.0),
             ),
-            // NEW: Energy Bar Widget
             SizedBox(height: 8.0),
             LinearProgressIndicator(
               value: energyLevel / 100,
