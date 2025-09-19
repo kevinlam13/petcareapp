@@ -15,14 +15,15 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   String petName = "Your Pet";
   int happinessLevel = 50;
   int hungerLevel = 50;
-  Color petColor = Colors.yellow; 
-  String mood = "Neutral"; 
+  Color petColor = Colors.yellow;
+  String mood = "Neutral";
+  final TextEditingController _nameController = TextEditingController(); 
 
   void _playWithPet() {
     setState(() {
       happinessLevel += 10;
       _updateHunger();
-      _updatePetColorAndMood(); 
+      _updatePetColorAndMood();
     });
   }
 
@@ -31,6 +32,15 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       hungerLevel -= 10;
       _updateHappiness();
       _updatePetColorAndMood();
+    });
+  }
+
+  
+  void _setPetName() {
+    setState(() {
+      if (_nameController.text.isNotEmpty) {
+        petName = _nameController.text;
+      }
     });
   }
 
@@ -75,6 +85,23 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32.0),
+              child: TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Pet Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            SizedBox(height: 8.0),
+            ElevatedButton(
+              onPressed: _setPetName,
+              child: Text('Set Name'),
+            ),
+            SizedBox(height: 16.0),
             Icon(
               Icons.catching_pokemon,
               size: 100,
@@ -85,7 +112,6 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               'Name: $petName',
               style: TextStyle(fontSize: 20.0),
             ),
-            
             SizedBox(height: 8.0),
             Text(
               'Mood: $mood',
